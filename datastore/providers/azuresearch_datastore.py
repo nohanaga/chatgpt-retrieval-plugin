@@ -134,6 +134,7 @@ class AzureSearchDataStore(DataStore):
         try:
             vector_top_k = query.top_k if filter is None else query.top_k * 2
             q = query.query if not AZURESEARCH_DISABLE_HYBRID else None
+            print("q", q)
             if AZURESEARCH_SEMANTIC_CONFIG != None and not AZURESEARCH_DISABLE_HYBRID:
                 # Ensure we're feeding a good number of candidates to the L2 reranker
                 vector_top_k = max(50, vector_top_k)
@@ -167,6 +168,8 @@ class AzureSearchDataStore(DataStore):
                     ),
                     score=hit["@search.score"]
                 ))
+
+            print(results)
                 
             return QueryResult(query=query.query, results=results)
         except Exception as e:
